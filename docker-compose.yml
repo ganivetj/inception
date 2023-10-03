@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  wordpress:
+    build:
+      context: ./srcs/wordpress
+    volumes:
+      - wordpress_data:/var/www/html
+    environment:
+      - WORDPRESS_DB_HOST=mysql
+      - WORDPRESS_DB_USER=root
+      - WORDPRESS_DB_PASSWORD=root_password
+    networks:
+      - inception
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=wordpress
+    networks:
+      - inception
+
+  nginx:
+    depends_on:
+      - wordpress
+    build: 
+      context: ./srcs/nginx
+    ports:
+      - "80:80"
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception
+
+volumes:
+  wordpress_data:
+
+networks:
+  inception:
+    driver: bridge
