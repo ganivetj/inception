@@ -6,10 +6,6 @@ services:
       context: ./srcs/wordpress
     volumes:
       - wordpress_data:/var/www/html
-    environment:
-      - WORDPRESS_DB_HOST=mariadb
-      - WORDPRESS_DB_USER=wp_user
-      - WORDPRESS_DB_PASSWORD=wp_password
     networks:
       - inception
 

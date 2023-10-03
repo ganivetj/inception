@@ -12,7 +12,7 @@ RUN wget https://wordpress.org/latest.zip && \
     unzip latest.zip && \
     rm latest.zip
 
-#COPY wp-config.php /var/www/html/wp-config.php
+#COPY wp-config.php /var/wordpress/wp-config.php
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
