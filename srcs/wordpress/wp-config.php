@@ -29,10 +29,10 @@ define( 'DB_USER', 'wp_user' );
 define( 'DB_PASSWORD', 'wp_password' );
 
 /** Database hostname */
-define( 'DB_HOST', 'mariadb:3306' );
+define( 'DB_HOST', 'mariadb' );
 
 /** Database charset to use in creating database tables. */
-define( 'DB_CHARSET', 'utf8' );
+define( 'DB_CHARSET', 'utf8mb4' );
 
 /** The database collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
@@ -48,14 +48,14 @@ define( 'DB_COLLATE', '' );
  *
  * @since 2.6.0
  */
-define('AUTH_KEY',         'SU+3Nu%Yoiys7N}+|nUOKWhWg~Qo]FKpz@Yu)U|+k?>b:aJh9}2J0Il@*u~>d4gf');
-define('SECURE_AUTH_KEY',  '6(TKD^I}&[w9vYnUZ.Vm#O5IKC-^C:4;Sa|9Tush-%2-;em^V9W=WUs]Fa5*$fa@');
-define('LOGGED_IN_KEY',    'T v#i=,9H!-TiYz8J78iu;i)<C{?UB|@;~>AY,x}OJ|>16SY)|gXa<nZR6u7B-iK');
-define('NONCE_KEY',        'v7*le^/Fdqpne>npSENh.e5~&8Jdif-BNXP!|fSwh7!sVlotMe;Ry06/jf,c+-QC');
-define('AUTH_SALT',        'R+kT$Ids J0q |KW J.A>AJ4gTSDRO~YLAW]|$WU` +Q+9}$siYqMat[+4nk}-FP');
-define('SECURE_AUTH_SALT', 'sPiU@lT?4/_CXGOZK$}Z}Z`?+)Priq-Os=%cL*u6vYj*<xDt/P/~Qc#8L&yU3VW?');
-define('LOGGED_IN_SALT',   'Bwy?!e<R@KbGEe^9Z`w~ixv`LgIt[zQw@ZMRUgk&uk^ kN+nIzl+/Q,&/&yjALxf');
-define('NONCE_SALT',       ':9oYFfNc@f`|0@#5S;yqiF 1u)30/~ zHQnW)R~q>|Tg<0ICH^ thM5;<}T6}AXn');
+define( 'AUTH_KEY',         '^ ?Apm)=$=jKyViF,qMZ>h@BSJ#v!zu0* |%RfN-<7(Sqfo JVA<<AWrTGsen?^<' );
+define( 'SECURE_AUTH_KEY',  '(r)u{3a Y!UIYLoO>#&=mS2Xl8@x#%-hEiuDhHhr{qUZ(J];<1#*I.yCC$n)[!eu' );
+define( 'LOGGED_IN_KEY',    'K|]Z:W$a;-Xi>1JiXY@%t]Pj#N:ppU),u|~caKq,6/3?1?18T}fxXFGgHgjx*}/S' );
+define( 'NONCE_KEY',        ')Rc5SAreWp *e]H>F.~8a?Tg_2BH,>4Mu@J7=oerpAZoGI8]4K A0+Q#R(v~!Mwv' );
+define( 'AUTH_SALT',        'p?5#Tg;1xU+vjCqazpgbQEzA*_>dODZ&Os*ZwJ?Zqv{u}aI92#tXF@#3]L}8hDVt' );
+define( 'SECURE_AUTH_SALT', '16ppx59A]0|F/!M@,9$v.JX(,8+a!+$@V<ywH^!ZpJU7D(#nZ:vRqVUz[[EkH(s#' );
+define( 'LOGGED_IN_SALT',   '$9p;*bi/r&X7_ecph`;[^h+nxaLN?e&w5,b/LYvM;xV~}D}! u/eu>XF`p1D2shq' );
+define( 'NONCE_SALT',       'iStpIO)gX+CDYpmuO*SWd/a4+78MlfpAA<jKT`?p)#.~ito.W+`.u$]t7+1JPK6*' );
 
 /**#@-*/
 
@@ -91,3 +91,6 @@ define( 'WP_DEBUG', false );
 if ( ! defined( 'ABSPATH' ) ) {
         define( 'ABSPATH', __DIR__ . '/' );
 }
+
+/** Sets up WordPress vars and included files. */
+require_once ABSPATH . 'wp-settings.php';

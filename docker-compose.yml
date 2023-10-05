@@ -1,21 +1,18 @@
-version: '3'
-
 services:
-  wordpress:
-    build:
-      context: ./srcs/wordpress
-    volumes:
-      - wordpress_data:/var/www/html
-    networks:
-      - inception
-
   mariadb:
     build:
       context: ./srcs/mariadb
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
       - "3306:3306"
     networks:
       - inception
+    env_file:
+      - .env
 
   nginx:
     depends_on:
@@ -28,6 +25,21 @@ services:
       - wordpress_data:/var/www/html
     networks:
       - inception
+
+  wordpress:
+    build:
+      context: ./srcs/wordpress
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception
+    env_file:
+      - .env
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
+ 
 
 volumes:
   wordpress_data:
