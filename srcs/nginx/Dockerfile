@@ -33,4 +33,13 @@ RUN apt-get autoremove --purge -y \
 
 COPY nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+
+# Copy the shell script into the container
+COPY nginx_update_hosts.sh /usr/local/bin/nginx_update_hosts.sh
+
+# Make the script executable
+RUN chmod +x /usr/local/bin/nginx_update_hosts.sh
+
+# Run the script (This will execute when the container starts)
+CMD ["/bin/bash", "-c", "/usr/local/bin/nginx_update_hosts.sh && nginx -g 'daemon off;'"]
+#CMD ["nginx", "-g", "daemon off;"]

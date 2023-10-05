@@ -1,5 +1,10 @@
 services:
+
   mariadb:
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception
     build:
       context: ./srcs/mariadb
     healthcheck:
@@ -9,10 +14,22 @@ services:
       retries: 5
     ports:
       - "3306:3306"
+    env_file:
+      - .env
+
+  wordpress:
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    build:
+      context: ./srcs/wordpress
+    volumes:
+      - wordpress_data:/var/www/html
     networks:
       - inception
     env_file:
       - .env
+    restart: on-failure
 
   nginx:
     depends_on:
@@ -25,21 +42,7 @@ services:
       - wordpress_data:/var/www/html
     networks:
       - inception
-
-  wordpress:
-    build:
-      context: ./srcs/wordpress
-    volumes:
-      - wordpress_data:/var/www/html
-    networks:
-      - inception
-    env_file:
-      - .env
-    depends_on:
-      mariadb:
-        condition: service_healthy
-
- 
+    restart: always
 
 volumes:
   wordpress_data:

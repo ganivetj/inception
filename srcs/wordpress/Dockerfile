@@ -7,7 +7,20 @@ RUN apt-get update && \
     sh -c 'echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list'
 
 RUN apt-get update && \
-    apt-get install -y php7.4 php7.4-fpm php7.4-mysql php7.4-cli unzip curl
+    apt-get install -y \
+    php8.0 \
+    php8.0-fpm \
+    php8.0-mysql \
+    php8.0-cli \
+    php8.0-curl \
+    php8.0-dom \
+    php8.0-imagick \
+    php8.0-mbstring \
+    php8.0-zip \
+    php8.0-gd \
+    php8.0-intl \
+    unzip \
+    curl
 
 COPY update_php_fpm_conf.sh /update_php_fpm_conf.sh
 RUN chmod +x /update_php_fpm_conf.sh

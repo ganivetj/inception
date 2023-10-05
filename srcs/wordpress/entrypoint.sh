@@ -1,12 +1,13 @@
 #!/bin/bash
 
+echo "***** Copying Wordpress files to volume"
+
 SRC_DIR="/var/wordpress"
 DEST_DIR="/var/www/html"
 cp -R $SRC_DIR/* $DEST_DIR
 chown -R www-data:www-data $DEST_DIR
 
-#cd $DEST_DIR
-#wp config create --path=$DEST_DIR --dbname=$DB_NAME --dbuser=$DB_USER --dbpass=$DB_PASSWORD --allow-root
+sleep 5
 
 wp core install \
 	--path=$DEST_DIR \
@@ -16,8 +17,9 @@ wp core install \
 	--admin_password=$WP_ADMIN_PASSWORD \
 	--admin_email=$WP_ADMIN_EMAIL \
 	--allow-root
-	
+
+wp plugin delete --all --path=$DEST_DIR --allow-root
 
 mkdir -p /run/php
 
-exec /usr/sbin/php-fpm7.4 -F
+exec /usr/sbin/php-fpm8.0 -F
