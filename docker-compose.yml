@@ -9,9 +9,9 @@ services:
       context: ./srcs/mariadb
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      interval: 3s
+      timeout: 2s
+      retries: 10
     ports:
       - "3306:3306"
     env_file:
@@ -48,6 +48,7 @@ services:
       - .env
     extra_hosts:
       - "jganivet.42.fr:192.168.1.2"
+      
 volumes:
   wordpress_data:
 
