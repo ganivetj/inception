@@ -1,7 +1,7 @@
 #!/bin/bash
 
 mysqld_safe &
-sleep 5s
+sleep 3s
 
 if [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASS" ]; then
   echo "Undefined environment variables"

@@ -1,4 +1,3 @@
-# Use Debian Buster as base image
 FROM debian:buster
 
 RUN apt-get update && \
@@ -20,19 +19,15 @@ RUN apt-get update && \
     php8.0-gd \
     php8.0-intl \
     unzip \
+    default-mysql-client \
     curl
 
-COPY update_php_fpm_conf.sh /update_php_fpm_conf.sh
-RUN chmod +x /update_php_fpm_conf.sh
-RUN /update_php_fpm_conf.sh
+RUN sed -i 's|listen = /run/php/php8.0-fpm.sock|listen = 9000|g' /etc/php/8.0/fpm/pool.d/www.conf
 
 WORKDIR /var
 RUN wget https://wordpress.org/latest.zip && \
     unzip latest.zip && \
     rm latest.zip
-
-COPY wp-config.php /var/wordpress/wp-config.php
-RUN chmod +x /var/wordpress/wp-config.php
 
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x wp-cli.phar && \
