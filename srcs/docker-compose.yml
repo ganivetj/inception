@@ -1,15 +1,15 @@
 services:
 
   mariadb:
+    build:
+      context: ./requirements/mariadb
     volumes:
-      - wordpress_data:/var/www/html
+      - db_data:/var/lib/mysql
     networks:
       inception:
         ipv4_address: 172.18.0.4
-    build:
-      context: ./srcs/mariadb
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "172.18.0.4"]
       interval: 3s
       timeout: 2s
       retries: 10
@@ -23,7 +23,7 @@ services:
       mariadb:
         condition: service_healthy
     build:
-      context: ./srcs/wordpress
+      context: ./requirements/wordpress
     volumes:
       - wordpress_data:/var/www/html
     networks:
@@ -37,13 +37,13 @@ services:
       mariadb:
         condition: service_healthy
     build: 
-      context: ./srcs/nginx
+      context: ./requirements/nginx
     ports:
       - "443:443"
       - "80:80"
     volumes:
       - wordpress_data:/var/www/html
-    networks:
+    networks: 
       inception:
         ipv4_address: 172.18.0.3
     env_file:
@@ -51,10 +51,11 @@ services:
 
 volumes:
   wordpress_data:
+  db_data:
 
 networks:
   inception:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.18.0.0/16
+        - subnet: 172.18.0.0/24

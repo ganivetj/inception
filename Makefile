@@ -6,20 +6,20 @@
 #    By: jganivet <jganivet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/05 00:46:02 by jganivet          #+#    #+#              #
-#    Updated: 2023/10/05 01:02:26 by jganivet         ###   ########.fr        #
+#    Updated: 2023/10/07 14:38:58 by jganivet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 up:
-	docker-compose up
+	docker-compose --file ./srcs/docker-compose.yml up -d
 
 build:
-	docker-compose up --build
-	
+	docker-compose --file ./srcs/docker-compose.yml up --build -d
+
 down:
-	docker-compose down
+	docker-compose --file ./srcs/docker-compose.yml down
 
 clean:
-	docker-compose down -v
-
-.PHONY: up down clean
+	docker-compose --file ./srcs/docker-compose.yml down -v
+	
+.PHONY: up build down clean
