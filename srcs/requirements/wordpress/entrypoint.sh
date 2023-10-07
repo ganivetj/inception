@@ -39,6 +39,12 @@ wp core install \
 	--skip-email \
 	--allow-root
 
+wp user create \
+	wp_editor \
+	editor@42.fr \
+	--role=editor \
+	--user_pass=editor
+
 wp option update home "https://$WP_URL" --path="$DEST_DIR" --allow-root && \
 wp option update siteurl "https://$WP_URL" --path="$DEST_DIR" --allow-root
 

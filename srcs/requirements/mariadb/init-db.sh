@@ -4,6 +4,12 @@ if [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASS" ]; then
   exit 1
 fi
 
+# Check if the data directory is empty
+if [ ! "$(ls -A /var/lib/mysql)" ]; then
+    # Initialize the data directory
+    mysql_install_db --user=mysql --ldata=/var/lib/mysql
+fi
+
 mysqld_safe &
 MYSQLD_PID=$!
 

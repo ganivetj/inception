@@ -6,7 +6,7 @@
 #    By: jganivet <jganivet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/05 00:46:02 by jganivet          #+#    #+#              #
-#    Updated: 2023/10/07 14:38:58 by jganivet         ###   ########.fr        #
+#    Updated: 2023/10/07 19:55:26 by jganivet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,5 +21,6 @@ down:
 
 clean:
 	docker-compose --file ./srcs/docker-compose.yml down -v
+	rm -rf ~/data/db_data
 	
 .PHONY: up build down clean
