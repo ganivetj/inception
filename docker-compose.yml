@@ -4,7 +4,8 @@ services:
     volumes:
       - wordpress_data:/var/www/html
     networks:
-      - inception
+      inception:
+        ipv4_address: 172.18.0.4
     build:
       context: ./srcs/mariadb
     healthcheck:
@@ -26,11 +27,10 @@ services:
     volumes:
       - wordpress_data:/var/www/html
     networks:
-      - inception
+      inception:
+        ipv4_address: 172.18.0.2
     env_file:
       - .env
-    extra_hosts:
-      - "jganivet.42.fr:192.168.1.1"
 
   nginx:
     depends_on:
@@ -39,19 +39,22 @@ services:
     build: 
       context: ./srcs/nginx
     ports:
+      - "443:443"
       - "80:80"
     volumes:
       - wordpress_data:/var/www/html
     networks:
-      - inception
+      inception:
+        ipv4_address: 172.18.0.3
     env_file:
       - .env
-    extra_hosts:
-      - "jganivet.42.fr:192.168.1.2"
-      
+
 volumes:
   wordpress_data:
 
 networks:
   inception:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
