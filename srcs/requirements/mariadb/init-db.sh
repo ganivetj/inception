@@ -4,10 +4,11 @@ if [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASS" ]; then
   exit 1
 fi
 
-# Check if the data directory is empty
+# If volume db_data is empty, apply mysql_install_db to it
 if [ ! "$(ls -A /var/lib/mysql)" ]; then
-    # Initialize the data directory
     mysql_install_db --user=mysql --ldata=/var/lib/mysql
+    # Also empty wordpress_data since it will need reinstall
+    #rm -rf ~/data/wordpress_data
 fi
 
 mysqld_safe &
@@ -17,6 +18,7 @@ c=0
 max_retries=30
 sleep_duration=0.5
 
+sleep 0.5
 until mysqladmin ping >/dev/null 2>&1; do
   c=$((c + 1))
   echo "Waiting for database to come up... Attempt $c"
