@@ -1,40 +1,32 @@
 #!/bin/bash
-if [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASS" ]; then
-  echo "Undefined environment variables"
-  exit 1
-fi
 
-# If volume db_data is empty, apply mysql_install_db to it
-if [ ! "$(ls -A /var/lib/mysql)" ]; then
-    mysql_install_db --user=mysql --ldata=/var/lib/mysql
+if [ ! "$(ls -A /var/lib/mysql)" ] || [ "$REINSTALL" = "TRUE" ]; then
+    echo "db_data volume is empty or REINSTALL=TRUE, will install new."
     REINSTALL=TRUE
+    mysql_install_db --user=mysql --ldata=/var/lib/mysql
+    mysqld --user=mysql --socket=/var/lib/mysql/mysql.sock &
+    MYSQLD_PID=$!
+
+    c=0
+    max_retries=30
+    sleep_duration=0.5
+
+    until echo 'SELECT 1' | mysql -uroot --socket=/var/lib/mysql/mysql.sock &> /dev/null; do
+      c=$((c + 1))
+      echo "Waiting for database to come up... Attempt $c"
+      if [ $c -ge $max_retries ]; then
+        echo "Failed to connect to database. Aborting."
+        exit 1
+      fi
+      sleep $sleep_duration
+    done
+
+    mysql -uroot --socket=/var/lib/mysql/mysql.sock -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
+    mysql -uroot --socket=/var/lib/mysql/mysql.sock -e "CREATE USER IF NOT EXISTS '$DB_USER'@'%' IDENTIFIED by '$DB_PASS';"
+    mysql -uroot --socket=/var/lib/mysql/mysql.sock -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%';"
+    mysql -uroot --socket=/var/lib/mysql/mysql.sock -e "FLUSH PRIVILEGES;"
+
+    echo "Restarting database, please wait"
+    mysqladmin -uroot --socket=/var/lib/mysql/mysql.sock shutdown
 fi
-mysqld_safe &
-MYSQLD_PID=$!
-
-c=0
-max_retries=30
-sleep_duration=0.5
-
-sleep 0.5
-until mysqladmin ping >/dev/null 2>&1; do
-  c=$((c + 1))
-  echo "Waiting for database to come up... Attempt $c"
-  if [ $c -ge $max_retries ]; then
-    echo "Failed to connect to database. Aborting."
-    exit 1
-  fi
-  sleep $sleep_duration
-done
-
-mysql -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
-mysql -e "CREATE USER IF NOT EXISTS '$DB_USER'@'%' IDENTIFIED by '$DB_PASS';"
-mysql -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%';"
-mysql -e "FLUSH PRIVILEGES;"
-
-echo "Restarting database..."
-
-kill -TERM $MYSQLD_PID
-wait $MYSQLD_PID
-
-exec mysqld
+exec mysqld --user=mysql --socket=/var/lib/mysql/mysql.sock
