@@ -7,10 +7,8 @@ fi
 # If volume db_data is empty, apply mysql_install_db to it
 if [ ! "$(ls -A /var/lib/mysql)" ]; then
     mysql_install_db --user=mysql --ldata=/var/lib/mysql
-    # Also empty wordpress_data since it will need reinstall
-    #rm -rf ~/data/wordpress_data
+    REINSTALL=TRUE
 fi
-
 mysqld_safe &
 MYSQLD_PID=$!
 
@@ -38,4 +36,5 @@ echo "Restarting database..."
 
 kill -TERM $MYSQLD_PID
 wait $MYSQLD_PID
+
 exec mysqld
