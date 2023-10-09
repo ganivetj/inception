@@ -20,17 +20,11 @@ RUN apt-get update && \
     php8.0-intl \
     unzip \
     default-mysql-client \
-    dnsutils \
-    curl \
-    vim
+    curl
 
 RUN sed -i 's|listen = /run/php/php8.0-fpm.sock|listen = 9000|g' /etc/php/8.0/fpm/pool.d/www.conf
 
 WORKDIR /var
-RUN wget https://wordpress.org/latest.zip && \
-    unzip latest.zip && \
-    rm latest.zip
-
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x wp-cli.phar && \
     mv wp-cli.phar /usr/local/bin/wp

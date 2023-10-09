@@ -14,10 +14,16 @@ done
 }
 
 check_env_vars
+
 echo "172.18.0.3 $WP_URL" >> /etc/hosts
-SRC_DIR="/var/wordpress"
+
 DEST_DIR="/var/www/html"
-cp -R $SRC_DIR/* $DEST_DIR
+
+wp core download \
+	--path=$DEST_DIR \
+	--version=6.3.1 \
+	--allow-root
+
 chown -R www-data:www-data $DEST_DIR
 
 wp config create \
