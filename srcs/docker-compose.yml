@@ -48,6 +48,17 @@ services:
         ipv4_address: 172.18.0.3
     env_file:
       - .env
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s -k https://localhost:443 | grep 'WordPress'"]
+      interval: 8s
+      timeout: 6s
+      retries: 10
+
+  wait-for-nginx:
+    image: busybox
+    depends_on:
+      nginx:
+        condition: service_healthy
 
 volumes:
   wordpress_data:
