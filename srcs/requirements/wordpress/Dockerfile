@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM debian:bullseye
 
 RUN apt-get update && \
     apt-get install -y software-properties-common apt-transport-https lsb-release ca-certificates wget && \
@@ -29,9 +29,9 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     chmod +x wp-cli.phar && \
     mv wp-cli.phar /usr/local/bin/wp
 
-COPY certificate.pem /etc/ssl/certs/certificate.pem
+COPY certificates/certificate.pem /etc/ssl/certs/certificate.pem
 
-COPY entrypoint.sh /entrypoint.sh
+COPY requirements/wordpress/tools/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]

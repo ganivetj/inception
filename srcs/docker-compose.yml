@@ -2,7 +2,7 @@ services:
 
   mariadb:
     build:
-      context: ./requirements/mariadb
+      dockerfile: requirements/mariadb/Dockerfile
     volumes:
       - ~/data/db_data:/var/lib/mysql
     networks:
@@ -13,8 +13,6 @@ services:
       interval: 3s
       timeout: 2s
       retries: 10
-    ports:
-      - "3306:3306"
     env_file:
       - .env
 
@@ -23,7 +21,7 @@ services:
       mariadb:
         condition: service_healthy
     build:
-      context: ./requirements/wordpress
+      dockerfile: requirements/wordpress/Dockerfile 
     volumes:
       - ~/data/wordpress_data:/var/www/html
     networks:
@@ -37,10 +35,9 @@ services:
       mariadb:
         condition: service_healthy
     build: 
-      context: ./requirements/nginx
+      dockerfile: requirements/nginx/Dockerfile
     ports:
       - "443:443"
-      - "80:80"
     volumes:
       - ~/data/wordpress_data:/var/www/html
     networks: 
@@ -55,7 +52,8 @@ services:
       retries: 10
 
   wait-for-nginx:
-    image: busybox
+    build: 
+      context: ./requirements/tools/wait-for-nginx
     depends_on:
       nginx:
         condition: service_healthy

@@ -21,7 +21,7 @@ DEST_DIR="/var/www/html"
 
 wp core download \
 	--path=$DEST_DIR \
-	--version=6.3.1 \
+	--version=6.3.2 \
 	--allow-root
 
 chown -R www-data:www-data $DEST_DIR
@@ -47,10 +47,10 @@ wp core install \
 
 wp user create \
 	--path=$DEST_DIR \
-	wp_editor \
-	editor@42.fr \
+	$WP_EDITOR_USER \
+	$WP_EDITOR_EMAIL \
 	--role=editor \
-	--user_pass=editor \
+	--user_pass=$WP_EDITOR_PASSWORD \
 	--allow-root
 
 wp option update home "https://$WP_URL" --path="$DEST_DIR" --allow-root && \
