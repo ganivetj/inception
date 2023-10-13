@@ -56,7 +56,10 @@ wp user create \
 wp option update home "https://$WP_URL" --path="$DEST_DIR" --allow-root && \
 wp option update siteurl "https://$WP_URL" --path="$DEST_DIR" --allow-root
 
+wp search-replace http://jganivet.42.fr/wp-admin/ https://jganivet.42.fr/wp-admin/ wp_posts --path="$DEST_DIR" --allow-root
+
 wp plugin delete --all --path=$DEST_DIR --allow-root --quiet
+
 wp_version=$(wp core version --path=$DEST_DIR --allow-root)
 echo -e "\e[32mWordPress v$wp_version stack running.\e[0m"
 
