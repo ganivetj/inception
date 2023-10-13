@@ -2,6 +2,7 @@ services:
 
   mariadb:
     build:
+      context: .
       dockerfile: requirements/mariadb/Dockerfile
     volumes:
       - ~/data/db_data:/var/lib/mysql
@@ -21,6 +22,7 @@ services:
       mariadb:
         condition: service_healthy
     build:
+      context: .
       dockerfile: requirements/wordpress/Dockerfile 
     volumes:
       - ~/data/wordpress_data:/var/www/html
@@ -35,6 +37,7 @@ services:
       mariadb:
         condition: service_healthy
     build: 
+      context: .
       dockerfile: requirements/nginx/Dockerfile
     ports:
       - "443:443"
