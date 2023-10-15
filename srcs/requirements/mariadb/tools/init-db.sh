@@ -1,5 +1,8 @@
 #!/bin/bash
 
+mkdir -p /run/mysqld/
+ln -s /var/lib/mysql/mysql.sock /run/mysqld/mysqld.sock
+
 if [ ! "$(ls -A /var/lib/mysql)" ] || [ "$REINSTALL" = "TRUE" ]; then
     echo "db_data volume is empty or REINSTALL=TRUE, will install new."
     REINSTALL=TRUE
