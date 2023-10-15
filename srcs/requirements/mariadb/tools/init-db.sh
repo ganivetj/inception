@@ -3,9 +3,7 @@
 mkdir -p /run/mysqld/
 ln -s /var/lib/mysql/mysql.sock /run/mysqld/mysqld.sock
 
-if [ ! "$(ls -A /var/lib/mysql)" ] || [ "$REINSTALL" = "TRUE" ]; then
-    echo "db_data volume is empty or REINSTALL=TRUE, will install new."
-    REINSTALL=TRUE
+if [ ! "$(ls -A /var/lib/mysql)" ]; then
     mysql_install_db --user=mysql --ldata=/var/lib/mysql
     mysqld --user=mysql --socket=/var/lib/mysql/mysql.sock &
     MYSQLD_PID=$!
