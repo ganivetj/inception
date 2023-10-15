@@ -1,6 +1,7 @@
 services:
 
   mariadb:
+    image: mariadb
     build:
       context: .
       dockerfile: requirements/mariadb/Dockerfile
@@ -11,13 +12,15 @@ services:
         ipv4_address: 172.18.0.4
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "172.18.0.4"]
-      interval: 3s
-      timeout: 2s
+      interval: 6s
+      timeout: 4s
       retries: 10
     env_file:
       - .env
+    restart: on-failure
 
   wordpress:
+    image: wordpress
     depends_on:
       mariadb:
         condition: service_healthy
@@ -31,8 +34,10 @@ services:
         ipv4_address: 172.18.0.2
     env_file:
       - .env
+    restart: on-failure
 
   nginx:
+    image: nginx
     depends_on:
       mariadb:
         condition: service_healthy
@@ -48,18 +53,8 @@ services:
         ipv4_address: 172.18.0.3
     env_file:
       - .env
-    healthcheck:
-      test: ["CMD-SHELL", "curl -s -k https://localhost:443 | grep 'WordPress'"]
-      interval: 8s
-      timeout: 6s
-      retries: 10
+    restart: on-failure
 
-  wait-for-nginx:
-    build: 
-      context: ./requirements/tools/wait-for-nginx
-    depends_on:
-      nginx:
-        condition: service_healthy
 
 volumes:
   wordpress_data:

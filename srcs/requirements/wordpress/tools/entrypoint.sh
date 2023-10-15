@@ -1,20 +1,5 @@
 #!/bin/bash
 
-check_env_vars() {
-local required_vars=("DB_NAME" "DB_USER" "DB_PASS" "DB_HOST"
-					 "WP_URL" "WP_TITLE" "WP_ADMIN_USER"
-					 "WP_ADMIN_PASSWORD" "WP_ADMIN_EMAIL")
-					 
-for var in "${required_vars[@]}"; do
-	if [ -z "${!var}" ]; then
-    	echo "Error: $var is not set. Aborting."
-    	exit 1
-	fi
-done
-}
-
-check_env_vars
-
 echo "172.18.0.3 $WP_URL" >> /etc/hosts
 
 DEST_DIR="/var/www/html"
@@ -55,13 +40,8 @@ wp user create \
 
 wp option update home "https://$WP_URL" --path="$DEST_DIR" --allow-root && \
 wp option update siteurl "https://$WP_URL" --path="$DEST_DIR" --allow-root
-
-wp search-replace http://jganivet.42.fr/wp-admin/ https://jganivet.42.fr/wp-admin/ wp_posts --path="$DEST_DIR" --allow-root
-
+wp search-replace http://$WP_URL/wp-admin/ https://$WP_URL/wp-admin/ wp_posts --path="$DEST_DIR" --allow-root
 wp plugin delete --all --path=$DEST_DIR --allow-root --quiet
-
-wp_version=$(wp core version --path=$DEST_DIR --allow-root)
-echo -e "\e[32mWordPress v$wp_version stack running.\e[0m"
 
 mkdir -p /run/php
 exec php-fpm8.0 -F

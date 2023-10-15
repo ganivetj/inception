@@ -18,7 +18,6 @@ RUN apt-get update && \
     php8.0-zip \
     php8.0-gd \
     php8.0-intl \
-    unzip \
     default-mysql-client \
     curl
 
