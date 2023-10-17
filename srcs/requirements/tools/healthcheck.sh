@@ -17,6 +17,13 @@ until [ "$status_code" -eq 200 ]; do
       fi
       
       sleep $sleep_duration
-      status_code=$(curl -I -k https://localhost:443 2>/dev/null | awk 'NR==1{print $2}')
+      status_code=$(curl -I -k https://$WP_URL 2>/dev/null | awk 'NR==1{print $2}')
 done
-firefox -new-window "https://$WP_URL:443" &
+
+OS_TYPE=$(uname)
+
+if [ "$OS_TYPE" == "Darwin" ]; then
+  open -na "Firefox" --args "https://$WP_URL"
+elif [ "$OS_TYPE" == "Linux" ]; then
+  firefox "https://$WP_URL" &
+fi

@@ -6,7 +6,7 @@
 #    By: jganivet <jganivet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/05 00:46:02 by jganivet          #+#    #+#              #
-#    Updated: 2023/10/13 02:18:37 by jganivet         ###   ########.fr        #
+#    Updated: 2023/10/17 11:43:57 by jganivet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,9 +16,13 @@ export
 all: up
 
 up: 
-	docker-compose --file ./srcs/docker-compose.yml up --build -d
+	docker-compose --file ./srcs/docker-compose.yml up -d
 	sh srcs/requirements/tools/healthcheck.sh
 
+build: 
+	docker-compose --file ./srcs/docker-compose.yml up --build -d
+	sh srcs/requirements/tools/healthcheck.sh
+	
 down:
 	docker-compose --file ./srcs/docker-compose.yml down
 
